@@ -21,9 +21,19 @@ class BookingController extends Controller
      */
     public function availableSlots(Request $request, $pitchId)
     {
+        try
+        {
+            $request->validate([
+                'date' => 'required|date|date_format:Y-m-d', // Ensure correct date format
+            ]);
+        }catch(\Illuminate\Validation\ValidationException $e)
+        {
+            return response()->json(['message' => 'Validation failed: ' . $e->getMessage()], 422);
+        }
         $date = $request->input('date');
         $slots = $this->generateSlots(); // Helper function to generate slots
         $bookedSlots = Booking::where('pitch_id', $pitchId)
+            ->where('date', $date)
             ->get(['start_time', 'end_time']);
         $availableSlots = array_filter($slots, function($slot) use ($bookedSlots)
         {
@@ -73,24 +83,27 @@ class BookingController extends Controller
      */
     public function bookPitch(Request $request, $pitchId)
     {
-        $data = $request->validate([
-            'date' => 'required|date',
-            'start_time' => 'required|date_format:H:i:s',
-            'end_time' => 'required|date_format:H:i:s|after:start_time',
-        ]);
-        $start  = new Carbon($data['start_time']);
-        $end    = new Carbon($data['end_time']);
-
-        if($start->diffInMinutes($end) < 60 )
+        try
+        {
+            $data = $request->validate([
+                'date' => 'required|date|date_format:Y-m-d', // Ensure correct date format
+                'start_time' => 'required|date_format:H:i:s',
+                'end_time' => 'required|date_format:H:i:s|after:start_time',
+            ]);
+        }catch(\Illuminate\Validation\ValidationException $e)
+        {
+            return response()->json(['message' => 'Validation failed: ' . $e->getMessage()], 422);
+        }
+        $start = new Carbon($data['start_time']);
+        $end = new Carbon($data['end_time']);
+        if($start->diffInMinutes($end) < 60)
         {
             return response()->json(['message' => 'Min booking duration is 60 minutes'], 409);
         }
-
-        if($start->diffInMinutes($end) > 90 )
+        if($start->diffInMinutes($end) > 90)
         {
             return response()->json(['message' => 'Max booking duration is 90 minutes'], 409);
         }
-
         // Check for overlapping bookings
         $existingBooking = Booking::where('pitch_id', $pitchId)
             ->where('date', $data['date'])
