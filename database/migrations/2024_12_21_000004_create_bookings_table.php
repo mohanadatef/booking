@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('bookings', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('pitch_id')->constrained()->onDelete('cascade');
+            $table->increments('id');
+            $table->unsignedInteger('pitch_id');
+            $table->foreign('pitch_id')->references('id')->on('pitches')->onDelete('cascade');
             $table->date('date');
             $table->time('start_time');
             $table->time('end_time');

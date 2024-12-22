@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pitches', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('stadium_id')->constrained()->onDelete('cascade');
+            $table->increments('id');
             $table->string('name');
+            $table->unsignedInteger('stadium_id');
+            $table->foreign('stadium_id')->references('id')->on('stadiums')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    public function availableSlots(Request $request, $stadiumId, $pitchId)
+    public function availableSlots(Request $request, $pitchId)
     {
         $date = $request->input('date');
         $slots = $this->generateSlots(); // Helper function to generate slots
@@ -27,7 +27,7 @@ class BookingController extends Controller
         return response()->json($availableSlots);
     }
 
-    public function bookPitch(Request $request, $stadiumId, $pitchId)
+    public function bookPitch(Request $request, $pitchId)
     {
         $data = $request->validate([
             'date' => 'required|date',
