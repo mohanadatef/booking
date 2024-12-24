@@ -6,3 +6,4 @@ to make it work follow these steps:
 5. run php artisan db:seed 
 6. run php artisan server
 ------------------------------------------
+can check api from collection postman ( uplodaded in the project )
