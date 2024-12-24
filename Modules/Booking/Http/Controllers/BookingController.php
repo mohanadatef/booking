@@ -44,8 +44,10 @@ class BookingController extends BasicController
     /**
      * Stores a new booking based on the incoming create request.
      *
-     * @param CreateRequest $request The request containing booking details.
-     * @return mixed The response indicating success or unknown error.
+     * Handles the storage of booking data and returns appropriate responses based on the operation result.
+     *
+     * @param CreateRequest $request The request containing booking information to be stored.
+     * @return mixed The response indicating success, validation error, or unknown error.
      */
     public function store(CreateRequest $request)
     {

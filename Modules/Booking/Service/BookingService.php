@@ -28,6 +28,13 @@ class BookingService extends BasicService
         $this->repo = $repository;
     }
 
+    /**
+     * Retrieves available time slots based on the request parameters
+     * by filtering out booked slots from a generated list of slots.
+     *
+     * @param Request $request HTTP request containing booking information.
+     * @return array Filtered array of available time slots.
+     */
     public function availableSlots(Request $request)
     {
         $slots = $this->generateSlots(); // Helper function to generate slots
@@ -45,6 +52,7 @@ class BookingService extends BasicService
         });
         return $availableSlots;
     }
+
     /**
      * Generates a list of time slots between specified start and end times.
      *
@@ -70,6 +78,14 @@ class BookingService extends BasicService
         return $slots;
     }
 
+    /**
+     * Stores a new booking based on the request parameters,
+     * ensuring that the booking meets minimum and maximum duration requirements
+     * and checking for overlapping bookings.
+     *
+     * @param Request $request HTTP request containing booking details.
+     * @return array|false Response containing booking confirmation or an error message.
+     */
     public function store(Request $request)
     {
         $start = new Carbon($request->start_time);
@@ -98,4 +114,3 @@ class BookingService extends BasicService
         return false;
     }
 }
-
