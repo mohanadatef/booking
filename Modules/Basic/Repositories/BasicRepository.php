@@ -4,13 +4,9 @@ namespace Modules\Basic\Repositories;
 
 use Illuminate\Container\Container as Application;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Basic\Traits\ChangeTrait;
-use Modules\Basic\Traits\LanguageTrait;
-use Modules\Basic\Traits\MediaTrait;
 
 abstract class BasicRepository
 {
-    use ChangeTrait, LanguageTrait, MediaTrait;
 
     /**
      * @var Model
@@ -66,7 +62,6 @@ abstract class BasicRepository
 
     abstract public function getFieldsRelationShipSearchable();
 
-    // abstract public function translationKey();
 
     /**
      * This is a PHP function that retrieves data from a database table with various options for
@@ -661,34 +656,6 @@ abstract class BasicRepository
         return $q->where($key, $value);
     }
 
-    /**
-     * This function updates a value in an object based on the provided ID and key.
-     *
-     * param id The ID of the record that needs to be updated.
-     * param key The key parameter is the name of the column in the database table that needs to be
-     * updated.
-     *
-     * return the result of calling the `change` method on the object found by calling the `find`
-     * method with the `` parameter and passing the `` parameter to the `change` method.
-     */
-    public function updateValue($id, $key)
-    {
-        return $this->change($this->find($id), $key);
-    }
-
-    /**
-     * This PHP function deletes data from a database table based on a given ID.
-     *
-     * param id The ID of the record that needs to be deleted from the database.
-     *
-     * return a boolean value. If the `` variable is not null, it will attempt to delete the
-     * record and return true if successful. Otherwise, it will return false.
-     */
-    public function delete($id)
-    {
-        $data = $this->find($id, ['*'], [], true);
-        return $data ? $data->delete() : false;
-    }
 
     public function destroy($id)
     {
@@ -702,21 +669,6 @@ abstract class BasicRepository
             return true;
         }
         return $data ? $data->delete() : false;
-    }
-
-    /**
-     * This PHP function toggles the "active" status of a record and returns the updated status.
-     *
-     * return bool a boolean value, which is the updated value of the "active" field of the record
-     * after toggling it.
-     */
-    public function toggleActive(): bool
-    {
-        $record = $this->find(request('id'), ['*']);
-        $record->update([
-            'active' => !$record->active
-        ]);
-        return $record->active;
     }
 
     /**

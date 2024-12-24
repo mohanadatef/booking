@@ -27,6 +27,14 @@ class Stadium extends Model
 
     // Indicates if the model should be timestamped
     public $timestamps = true;
+    // This class appears to handle search configurations and relationships for a database or data model.
+    public $searchRelationShip = [];
+    /**
+     * [columns that needs to has customed search such as like or where in]
+     *
+     * @var string[]
+     */
+    public $searchConfig = [];
 
     // Validation rules for the Stadium entity
     public static $rules = [

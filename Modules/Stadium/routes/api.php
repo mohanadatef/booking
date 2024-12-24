@@ -23,7 +23,7 @@ Route::group(['middleware' => 'api'], function () {
                 Route::post('/store', 'store');
                 Route::post('/update', 'update');
                 Route::get('/show/{id}', 'show');
-                Route::delete('/delete/{id}', 'delete');
+                Route::delete('/destroy/{id}', 'destroy');
             });
         Route::controller(PitchController::class)
             ->prefix('/pitch')->name('pitch.')->group(function () {
@@ -31,7 +31,7 @@ Route::group(['middleware' => 'api'], function () {
                 Route::post('/store', 'store');
                 Route::post('/update', 'update');
                 Route::get('/show/{id}', 'show');
-                Route::delete('/delete/{id}', 'delete');
+                Route::delete('/destroy/{id}', 'destroy');
             });
     });
 });

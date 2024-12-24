@@ -3,6 +3,7 @@
 namespace Modules\Stadium\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Modules\Stadium\Http\Requests\Pitch\CreateRequest;
 use Modules\Stadium\Http\Requests\Pitch\UpdateRequest;
 use Modules\Stadium\Http\Resources\Pitch\PitchResource;
@@ -18,7 +19,7 @@ use Modules\Basic\Http\Controllers\BasicController;
  */
 class PitchController extends BasicController
 {
-    private $service;
+    private PitchService $service;
 
     /**
      * PitchController constructor.
@@ -39,37 +40,33 @@ class PitchController extends BasicController
      * If successful, it returns the data; otherwise, it handles the error.
      *
      * @param Request $request Incoming request containing filtering and pagination information
-     * @return \Illuminate\Http\JsonResponse
+     * @return Response
      */
     public function list(Request $request)
     {
         $data = $this->service->list($request, $this->pagination(), $this->perPage());
         if($data)
         {
-            return $this->apiResponse($data);
+            return $this->apiResponse(PitchResource::collection($data));
         }
         return $this->unKnowError('failed');
     }
 
     /**
-     * Create Account
+     * Store Pitch
      *
-     * The Create Account endpoint allows users to register and create a new account in the system.
-     * This endpoint handles the registration process, including sending a verification code to
-     * the user's email address for account activation.
+     * Handles the creation of a new stadium record based on the provided request data.
+     * If successful, it returns the created data; otherwise, it handles the error.
      *
-     * This endpoint receives the necessary information to create a new account.
-     * The user needs to provide the required details, such as their name,
-     * email address, and password, as per the request parameters. Upon successful registration,
-     * a verification code will be sent to the user's email address.
-     *
+     * @param CreateRequest $request Incoming request containing the new stadium data
+     * @return Response
      */
     public function store(CreateRequest $request)
     {
         $data = $this->service->store($request);
         if($data)
         {
-            return $this->createResponse($data, 'done');
+            return $this->createResponse(new PitchResource($data), 'done');
         }
         return $this->unKnowError();
     }
@@ -81,7 +78,7 @@ class PitchController extends BasicController
      * If the stadium is found, it returns the data; otherwise, it handles the error.
      *
      * @param mixed $id The identifier of the stadium to be retrieved
-     * @return \Illuminate\Http\JsonResponse
+     * @return Response
      */
     public function show($id)
     {
@@ -100,36 +97,35 @@ class PitchController extends BasicController
      * If successful, it returns the updated data; otherwise, it handles the error.
      *
      * @param UpdateRequest $request Incoming request containing the updated stadium data
-     * @return \Illuminate\Http\JsonResponse
+     * @return Response
      */
     public function update(UpdateRequest $request)
     {
         $data = $this->service->update($request);
         if($data)
         {
-            return $this->createResponse($data, 'done');
+            return $this->createResponse(new PitchResource($data), 'done');
         }
         return $this->unKnowError();
     }
 
     /**
-     * Delete Dropshipper
+     * Destroy Pitch
      *
-     * The Delete Dropshipper endpoint allows users to delete their dropshipper account from the system.
-     * This endpoint provides a way for users to permanently remove their account and associated data.
+     * Handles the deletion of a resource based on the given request.
+     * If successful, it provides a response indicating the deletion; otherwise, it handles the error.
      *
-     * This endpoint deletes the dropshipper account based on the provided request parameters.
-     * The user needs to provide the necessary details or confirmation to initiate the account deletion process.
-     *
-     * @authenticated
+     * @param Request $request Incoming request containing data for deletion
+     * @return Response
      */
-    public function delete(Request $request)
+    public function destroy(Request $request,$id)
     {
-        $data = $this->service->destroy($request);
+        $data = $this->service->destroy($request,$id);
         if($data)
         {
             return $this->deleteResponse('done');
         }
         return $this->unKnowError('failed');
     }
+
 }

@@ -2,27 +2,22 @@
 
 namespace Modules\Basic\Traits;
 
-use Illuminate\Http\Request;
 use function response;
 
+/**
+ * Trait ApiResponseTrait
+ * This trait provides methods for uniform API responses, including success, error, and pagination.
+ */
 trait ApiResponseTrait
 {
     /**
-     * The function returns an API response with data, status, message, errors, and pagination.
-     * 
-     * param data The data that needs to be returned in the API response. It can be an array, object
-     * or any other data type.
-     * param message A string message that describes the response. It can be used to provide
-     * additional information about the response data or to indicate any errors or issues that occurred
-     * during the request.
-     * param code HTTP status code to be returned in the response.
-     * param errors An array of errors that occurred during the API request. This can include
-     * validation errors, authentication errors, or any other errors that may have occurred.
-     * 
-     * return The function `apiResponse` returns a response object with an array containing the
-     * following keys: `data`, `status`, `message`, `errors`, and `pagination`. The `data` key contains
-     * the data to be returned, the `status` key indicates whether the response is successful or not,
-     * the `message` key contains a message to be returned, the `errors` key contains any errors
+     * Generate a standardized API response.
+     *
+     * @param array $data The data to return in the response.
+     * @param string $message A message associated with the response.
+     * @param int $code The HTTP status code for the response.
+     * @param array $errors Any errors associated with the response.
+     * @return \Illuminate\Http\Response
      */
     public function apiResponse($data = [], $message = "", $code = 200, $errors = [])
     {
@@ -36,69 +31,51 @@ trait ApiResponseTrait
         return response($array, $code);
     }
 
-   /**
-    * The function generates pagination response data based on the input data and request parameters.
-    * 
-    * param data an array or object containing the paginated data
-    * 
-    * return an array containing pagination information such as total number of items, items per page,
-    * current page number, and total number of pages. The array may contain multiple pagination
-    * information if multiple models are specified in the request. If pagination is not requested or no
-    * data is provided, an empty array is returned.
-    */
+    /**
+     * Create a pagination response if applicable.
+     *
+     * @param array $data The data to paginate.
+     * @return array Pagination information or an empty array.
+     */
     public function paginationResponse($data = [])
     {
-        if (isset(Request()->pagination) && $data) {
-            if (isset(Request()->model) && !empty(Request()->model)) {
-                if (!is_array(Request()->model)) {
-                    $models = explode(',', Request()->model);
-                } else {
-                    $models = Request()->model;
-                }
-                foreach ($models as $model) {
-                    $pagination[$model] = [
-                        'total' => $data[$model]->total(),
-                        'perPage' => $data[$model]->perPage(),
-                        'currentPage' => $data[$model]->currentPage(),
-                        'total_pages' => ceil($data[$model]->Total() / $data[$model]->PerPage())
-                    ];
-                }
-            } else {
-                $pagination = [
-                    'total' => $data->total(),
-                    'perPage' => $data->perPage(),
-                    'currentPage' => $data->currentPage(),
-                    'total_pages' => ceil($data->Total() / $data->PerPage())
+        if (!isset(Request()->pagination) || !$data) {
+            return [];
+        }
+
+        $models = isset(Request()->model) ? (is_array(Request()->model) ? Request()->model : explode(',', Request()->model)) : [null];
+
+        $pagination = [];
+        foreach ($models as $model) {
+            if (isset($data[$model])) {
+                $pagination[$model] = [
+                    'total' => $data[$model]->total(),
+                    'perPage' => $data[$model]->perPage(),
+                    'currentPage' => $data[$model]->currentPage(),
+                    'total_pages' => ceil($data[$model]->total() / $data[$model]->perPage())
                 ];
             }
-        } else {
-            $pagination = [];
         }
+
         return $pagination;
     }
 
     /**
-     * The function returns an array of HTTP success codes.
-     * 
-     * return An array of HTTP success codes (200, 201, and 202).
+     * Get the list of HTTP success codes.
+     *
+     * @return array An array of success HTTP status codes.
      */
     public function successCode()
     {
-        return [
-            200, 201, 202
-        ];
+        return [200, 201, 202];
     }
 
     /**
-     * This PHP function creates an API response with a given data, message, and HTTP status code.
-     * 
-     * param data An array of data that will be returned in the response body. This can be any type of
-     * data, such as an object, array, or string.
-     * param message The message parameter is a string that represents a custom message that can be
-     * included in the response. It is an optional parameter and can be used to provide additional
-     * information about the response data.
-     * 
-     * return A response with HTTP status code 201 (Created) along with the provided data and message.
+     * Create a response for successful resource creation.
+     *
+     * @param array $data The data of the created resource.
+     * @param string $message A message associated with the response.
+     * @return \Illuminate\Http\Response
      */
     public function createResponse($data = [], $message = "")
     {
@@ -106,15 +83,11 @@ trait ApiResponseTrait
     }
 
     /**
-     * The function returns an API response with a status code of 202, along with optional data and
-     * message parameters.
-     * 
-     * param data An array of data that will be returned in the response.
-     * param message The message parameter is a string that represents a custom message that can be
-     * included in the API response. It is an optional parameter and can be left empty if no message
-     * needs to be included.
-     * 
-     * return an API response with the provided data, message, and HTTP status code 202 (Accepted).
+     * Create a response for successful resource update.
+     *
+     * @param array $data The data of the updated resource.
+     * @param string $message A message associated with the response.
+     * @return \Illuminate\Http\Response
      */
     public function updateResponse($data = [], $message = "")
     {
@@ -122,13 +95,10 @@ trait ApiResponseTrait
     }
 
     /**
-     * This function returns an API response with a 401 status code and an optional error message.
-     * 
-     * param textError The error message that will be returned in the API response if the user is
-     * unauthorized (i.e. not authenticated or not authorized to access the requested resource).
-     * 
-     * return A response with an empty data array, an error message (if provided), and a status code
-     * of 401 (Unauthorized).
+     * Create a response for unauthorized access.
+     *
+     * @param string $textError An optional error message.
+     * @return \Illuminate\Http\Response
      */
     public function unauthorizedResponse($textError = "")
     {
@@ -136,15 +106,10 @@ trait ApiResponseTrait
     }
 
     /**
-     * This PHP function returns an API response with an empty array and a message with a 200 status
-     * code.
-     * 
-     * param message The message parameter is a string that represents the message to be returned in
-     * the API response. It is an optional parameter and if not provided, the default message will be
-     * an empty string.
-     * 
-     * return An API response with an empty data array, a message (which can be passed as an
-     * argument), and a status code of 200.
+     * Create a response for a successful deletion.
+     *
+     * @param string $message A message associated with the response.
+     * @return \Illuminate\Http\Response
      */
     public function deleteResponse($message = "")
     {
@@ -152,13 +117,10 @@ trait ApiResponseTrait
     }
 
     /**
-     * This function returns a 404 error response with an optional error message.
-     * 
-     * param textError The parameter "textError" is a string that represents the error message to be
-     * returned in the API response when a 404 error occurs.
-     * 
-     * return A response with an empty data array, an error message (if provided), and a status code
-     * of 404.
+     * Create a response for a resource not found error.
+     *
+     * @param string $textError An optional error message.
+     * @return \Illuminate\Http\Response
      */
     public function notFoundResponse($textError = "")
     {
@@ -166,16 +128,10 @@ trait ApiResponseTrait
     }
 
     /**
-     * This is a PHP function that returns an API response with a default error message if no message
-     * is provided.
-     * 
-     * param textError The parameter `` is a string that represents the error message to be
-     * returned in case of an unknown error. If the parameter is not provided, the default value
-     * `'problem'` will be used. The function returns an API response with an empty data array, the
-     * error message, and a
-     * 
-     * return This function is returning an API response with an empty data array, a default error
-     * message of "problem" (if no error message is provided as an argument), and a status code of 400.
+     * Create a response for an unknown error.
+     *
+     * @param string|null $textError An optional error message.
+     * @return \Illuminate\Http\Response
      */
     public function unKnowError($textError = null)
     {
@@ -183,33 +139,22 @@ trait ApiResponseTrait
     }
 
     /**
-     * This function returns an API response with a 422 status code and optional error messages.
-     * 
-     * param messages The  parameter is an optional parameter that can be passed to the
-     * apiValidation() function. It is used to provide additional error messages or details about why
-     * the API request failed. If provided, these messages will be included in the response returned by
-     * the function.
-     * 
-     * return an API response with an empty data array, an empty message string, a status code of 422
-     * (which typically indicates a validation error), and an optional messages parameter that can be
-     * used to provide additional error messages.
+     * Create a validation error response.
+     *
+     * @param string $messages Additional error messages.
+     * @return \Illuminate\Http\Response
      */
     public function apiValidation($messages = "")
     {
-        return $this->apiResponse([], $messages, 422, $messages);
+        // Optional parameter messages can be used to provide additional error messages
+        return $this->apiResponse([], $messages, 422);
     }
 
     /**
-     * This function returns an API response with a 405 status code and an optional error message for a
-     * method not allowed error.
-     * 
-     * param messages The  parameter is an optional string parameter that represents the
-     * error message to be returned in the API response. It is used in the context of an HTTP 405
-     * Method Not Allowed error, which occurs when the requested HTTP method is not supported by the
-     * server for the requested resource.
-     * 
-     * return The methodNotAllowed function is returning an API response with an empty data array, a
-     * custom message (if provided), and a status code of 405 (Method Not Allowed).
+     * Create a response for method not allowed error.
+     *
+     * @param string $messages An optional error message.
+     * @return \Illuminate\Http\Response
      */
     public function methodNotAllowed($messages = "")
     {
@@ -217,15 +162,14 @@ trait ApiResponseTrait
     }
 
     /**
-     * This PHP function returns an API response with a 403 status code and an optional error message.
-     * 
-     * param textError The error message to be returned in the API response.
-     * 
-     * return A response with an empty data array, an optional error message (if provided), and a HTTP
-     * status code of 403 (Forbidden).
+     * Create a response for insufficient permissions.
+     *
+     * @param string $textError An optional error message.
+     * @return \Illuminate\Http\Response
      */
     public function unPermissionResponse($textError = "")
     {
         return $this->apiResponse([], $textError, 403);
     }
 }
+

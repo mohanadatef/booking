@@ -19,11 +19,18 @@ class Pitch extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'name','stadium_id'
+        'name', 'stadium_id'
     ];
 
     public $timestamps = true;
-
+    // This class appears to handle search configurations and relationships for a database or data model.
+    public $searchRelationShip = [];
+    /**
+     * [columns that needs to has customed search such as like or where in]
+     *
+     * @var string[]
+     */
+    public $searchConfig = [];
     /**
      * Validation rules for creating or updating a pitch.
      * It specifies required fields and their constraints.

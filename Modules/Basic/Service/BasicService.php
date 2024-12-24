@@ -7,6 +7,20 @@ use Illuminate\Http\Request;
 class BasicService
 {
     /**
+     * Retrieves a list of data based on the given request parameters.
+     *
+     * @param Request $request The request object containing the necessary parameters for data retrieval.
+     * @return mixed The retrieved data if found, otherwise false.
+     */
+    public function list(Request $request)
+    {
+        $data = $this->repo->findBy($request);
+        if ($data) {
+            return $data;
+        }
+        return false;
+    }
+    /**
      * This PHP function retrieves data from a repository based on a given ID.
      *
      * param id The parameter "id" is a variable that represents the unique identifier of the data
@@ -23,7 +37,6 @@ class BasicService
         }
         return false;
     }
-
     /**
      * This function saves data from a request and returns true if successful, false otherwise.
      *
@@ -80,33 +93,5 @@ class BasicService
             return $data;
         }
         return false;
-    }
-
-    /**
-     * This PHP function updates a value in a repository based on an ID and a key.
-     *
-     * param id The ID of the record that needs to be updated in the database.
-     * param key The key parameter is a string that represents the name of the column in the database
-     * table that needs to be updated.
-     *
-     * return the result of calling the `updateValue` method of the `` object with the `` and
-     * `` parameters. The specific data being returned depends on the implementation of the
-     * `updateValue` method.
-     */
-    public function changeStatus($id, $key)
-    {
-        $data = $this->repo->updateValue($id, $key);
-        return $data;
-    }
-
-    /**
-     * This function toggles the active status of an object and returns a boolean value indicating
-     * whether the operation was successful or not.
-     *
-     * return bool A boolean value is being returned.
-     */
-    public function toggleActive(): bool
-    {
-        return $this->repo->toggleActive();
     }
 }
