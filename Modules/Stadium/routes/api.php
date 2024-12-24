@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Stadium\Http\Controllers\StadiumController;
+use Modules\Stadium\Http\Controllers\PitchController;
 
 /*
  *--------------------------------------------------------------------------
@@ -14,6 +15,23 @@ use Modules\Stadium\Http\Controllers\StadiumController;
  *
 */
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('stadium', StadiumController::class)->names('stadium');
+Route::group(['middleware' => 'api'], function () {
+    Route::name('api.')->group(function () {
+        Route::controller(StadiumController::class)
+            ->prefix('/stadium')->name('stadium.')->group(function () {
+                Route::get('/list', 'list');
+                Route::post('/store', 'store');
+                Route::post('/update', 'update');
+                Route::get('/show/{id}', 'show');
+                Route::delete('/delete/{id}', 'delete');
+            });
+        Route::controller(PitchController::class)
+            ->prefix('/pitch')->name('pitch.')->group(function () {
+                Route::get('/list', 'list');
+                Route::post('/store', 'store');
+                Route::post('/update', 'update');
+                Route::get('/show/{id}', 'show');
+                Route::delete('/delete/{id}', 'delete');
+            });
+    });
 });

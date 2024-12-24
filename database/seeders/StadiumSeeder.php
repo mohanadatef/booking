@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Stadium;
 use Illuminate\Database\Seeder;
+use Modules\Stadium\Entities\Stadium;
 
 class StadiumSeeder extends Seeder
 {
