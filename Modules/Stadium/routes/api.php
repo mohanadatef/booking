@@ -16,7 +16,6 @@ use Modules\Stadium\Http\Controllers\PitchController;
 */
 
 Route::group(['middleware' => 'api'], function () {
-    Route::name('api.')->group(function () {
         Route::controller(StadiumController::class)
             ->prefix('/stadium')->name('stadium.')->group(function () {
                 Route::get('/list', 'list');
@@ -34,4 +33,3 @@ Route::group(['middleware' => 'api'], function () {
                 Route::delete('/destroy/{id}', 'destroy');
             });
     });
-});

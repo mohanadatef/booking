@@ -1,9 +1,8 @@
 <?php
 
-namespace Modules\Stadium\Entities;
+namespace Modules\Stadium\Models;
 
 // Importing necessary classes for the model
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Stadium extends Model
 {
-    use HasFactory;
 
     /**
      * The attributes that are mass assignable.

@@ -3,6 +3,7 @@
 namespace Modules\Stadium\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Modules\Stadium\Models\Stadium;
 
 class StadiumDatabaseSeeder extends Seeder
 {
@@ -11,6 +12,16 @@ class StadiumDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+
+        for ($i=0;$i <= 2;$i++) {
+            $stadium = Stadium::create([
+                'name' => 'Stadium '.($i+1),
+            ]);
+            $stadium->pitches()->createMany([
+                ['name' => 'Pitch 1'],
+                ['name' => 'Pitch 2'],
+                ['name' => 'Pitch 3'],
+            ]);
+        }
     }
 }

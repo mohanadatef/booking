@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Modules\Basic\Traits\ApiResponseTrait;
 use Modules\Basic\Traits\validationRulesTrait;
-use Modules\Stadium\Entities\Stadium;
+use Modules\Stadium\Models\Stadium;
 
 /**
  * Class CreateRequest

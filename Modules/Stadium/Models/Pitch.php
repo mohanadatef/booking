@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Stadium\Entities;
+namespace Modules\Stadium\Models;
 
 use App\Models\Booking;
 use Illuminate\Database\Eloquent\Model;
@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * The Pitch class represents a pitch entity within the system.
  * It defines the structure of the pitch and its relationships with
- * other entities, such as stadiums and bookings.
+ * other Models, such as stadiums and bookings.
  */
 class Pitch extends Model
 {

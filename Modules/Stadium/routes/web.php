@@ -14,6 +14,4 @@ use Modules\Stadium\Http\Controllers\StadiumController;
 |
 */
 
-Route::group([], function () {
-    Route::resource('stadium', StadiumController::class)->names('stadium');
-});
+

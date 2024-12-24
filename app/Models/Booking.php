@@ -4,7 +4,7 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
-use Modules\Stadium\Entities\Pitch;
+use Modules\Stadium\Models\Pitch;
 
 class Booking extends Model
 {

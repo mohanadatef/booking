@@ -5,7 +5,7 @@ namespace Modules\Stadium\Repositories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Modules\Basic\Repositories\BasicRepository;
-use Modules\Stadium\Entities\Stadium;
+use Modules\Stadium\Models\Stadium;
 
 class StadiumRepository extends BasicRepository
 {
