@@ -1,16 +1,16 @@
 <?php
 
-namespace Modules\Stadium\Http\Resources\Pitch;
+namespace Modules\Booking\Http\Resources\Booking;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\Stadium\Http\Resources\Stadium\StadiumResource;
+use Modules\Stadium\Http\Resources\Pitch\PitchResource;
 
 /**
- * Class PitchResource
+ * Class BookingResource
  *
  * This class is responsible for transforming the Stadium model into a JSON resource.
  */
-class PitchResource extends JsonResource
+class BookingResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -25,15 +25,13 @@ class PitchResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'stadium' => new StadiumResource($this->stadium),
+            'date' => $this->date,
+            'start_time' => $this->start_time,
+            'end_time' => $this->end_time,
+            'pitch' => new PitchResource($this->pitch),
         ];
     }
 }
 
-// The PitchResource class extends the JsonResource to provide a format for representing
-// pitch data obtained from the Stadium model in API responses.
-
-// The PitchResource class converts the Pitch model properties into an array structure
-// suitable for JSON output, encapsulating associated Stadium details using StadiumResource.
-
+// This class extends the JsonResource to facilitate the conversion of booking-related data into JSON format
+// It provides a clear and structured way to manage and present booking information in the API.

@@ -300,10 +300,6 @@ abstract class BasicRepository
                     {
                         $this->getFieldsSearchableQuery($value, $key, $query);
                     }
-                    if(!empty($this->translationKey()) && in_array($key, $this->translationKey()))
-                    {
-                        $this->translationKeyQuery($value, $key, $query);
-                    }
                     if(!empty($this->getFieldsRelationShipSearchable()) && array_key_exists($key,
                             $this->getFieldsRelationShipSearchable()))
                     {
@@ -754,37 +750,6 @@ abstract class BasicRepository
                 return $query->where($key, $value);
             }
         }
-    }
-
-    /**
-     * This is a PHP function that queries a database based on a translation key and value.
-     *
-     * param value The value to search for in the translation table.
-     * param key The key is a string that represents the key of the translation that is being queried.
-     * It is used to filter the results based on the translation key.
-     * param query a query builder instance that is used to build the database query
-     */
-    public function translationKeyQuery($value, $key, $query)
-    {
-        $query->whereHas('translation', function($query) use ($key, $value)
-        {
-            if(is_array($value))
-            {
-                $query->where('key', $key)->whereIn('value', $value);
-            }elseif(strpos($value, ',') !== false)
-            {
-                $query->whereIn($key, explode(',', $value));
-            }elseif(isset($this->model->searchConfig) && !is_array($value) && array_key_exists($key,
-                    $this->model->searchConfig) && !empty($this->model->searchConfig[$key]))
-            {
-                $condition = $this->model->searchConfig[$key] == 'like' || $this->model->searchConfig[$key] == 'LIKE';
-                $query->where('key', $key)
-                    ->where('value', $this->model->searchConfig[$key], $condition ? '%' . $value . '%' : $value);
-            }else
-            {
-                $query->where('key', $key)->where('value', $value);
-            }
-        });
     }
 
     /**

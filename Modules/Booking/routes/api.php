@@ -1,19 +1,17 @@
 <?php
 
+// Importing necessary classes for routing
 use Illuminate\Support\Facades\Route;
 use Modules\Booking\Http\Controllers\BookingController;
 
-/*
- *--------------------------------------------------------------------------
- * API Routes
- *--------------------------------------------------------------------------
- *
- * Here is where you can register API routes for your application. These
- * routes are loaded by the RouteServiceProvider within a group which
- * is assigned the "api" middleware group. Enjoy building your API!
- *
-*/
-
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('booking', BookingController::class)->names('booking');
+// Defining a route group with 'api' middleware for booking-related routes
+Route::group(['middleware' => 'api'], function () {
+    // Setting up the BookingController with a route prefix and name
+    Route::controller(BookingController::class)
+        ->prefix('/booking')->name('booking.')->group(function () {
+            // Route to fetch available booking slots
+            Route::get('/availableSlots', 'availableSlots');
+            // Route to store a new booking
+            Route::post('/store', 'store');
+        });
 });

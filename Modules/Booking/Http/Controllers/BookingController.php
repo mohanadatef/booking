@@ -2,64 +2,62 @@
 
 namespace Modules\Booking\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Modules\Basic\Http\Controllers\BasicController;
+use Modules\Booking\Http\Requests\Booking\CheckRequest;
+use Modules\Booking\Http\Requests\Booking\CreateRequest;
+use Modules\Booking\Http\Resources\Booking\BookingResource;
+use Modules\Booking\Service\BookingService;
 
-class BookingController extends Controller
+/**
+ * Class BookingController
+ *
+ * This controller handles all the booking-related operations,
+ * including checking available slots and storing new bookings.
+ */
+class BookingController extends BasicController
 {
+    private BookingService $service;
+
     /**
-     * Display a listing of the resource.
+     * BookingController constructor.
+     *
+     * Initializes the BookingService instance to handle business logic related to stadium operations.
+     *
+     * @param BookingService $Service Instance of BookingService
      */
-    public function index()
+    public function __construct(BookingService $Service)
     {
-        return view('booking::index');
+        $this->service = $Service;
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Retrieves available slots based on the incoming check request.
+     *
+     * @param CheckRequest $request The request containing parameters for checking availability.
+     * @return mixed The response containing available slots.
      */
-    public function create()
+    public function availableSlots(CheckRequest $request)
     {
-        return view('booking::create');
+        return $this->apiResponse($this->service->availableSlots($request));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Stores a new booking based on the incoming create request.
+     *
+     * @param CreateRequest $request The request containing booking details.
+     * @return mixed The response indicating success or unknown error.
      */
-    public function store(Request $request)
+    public function store(CreateRequest $request)
     {
-        //
+        $data = $this->service->store($request);
+        if(isset($data['message'])) {
+            return $this->apiValidation($data['message']);
+        }elseif($data)
+        {
+            return $this->createResponse(new BookingResource($data), 'done');
+        }else{
+            return $this->unKnowError();
+        }
     }
 
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
-    {
-        return view('booking::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('booking::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

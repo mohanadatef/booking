@@ -14,6 +14,4 @@ use Modules\Booking\Http\Controllers\BookingController;
 |
 */
 
-Route::group([], function () {
-    Route::resource('booking', BookingController::class)->names('booking');
-});
+

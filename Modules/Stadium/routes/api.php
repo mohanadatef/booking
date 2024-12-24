@@ -15,21 +15,25 @@ use Modules\Stadium\Http\Controllers\PitchController;
  *
 */
 
+// Grouping the API routes and applying the 'api' middleware
 Route::group(['middleware' => 'api'], function () {
-        Route::controller(StadiumController::class)
-            ->prefix('/stadium')->name('stadium.')->group(function () {
-                Route::get('/list', 'list');
-                Route::post('/store', 'store');
-                Route::post('/update', 'update');
-                Route::get('/show/{id}', 'show');
-                Route::delete('/destroy/{id}', 'destroy');
-            });
-        Route::controller(PitchController::class)
-            ->prefix('/pitch')->name('pitch.')->group(function () {
-                Route::get('/list', 'list');
-                Route::post('/store', 'store');
-                Route::post('/update', 'update');
-                Route::get('/show/{id}', 'show');
-                Route::delete('/destroy/{id}', 'destroy');
-            });
-    });
+    // Registering the routes for the Stadium resource
+    Route::controller(StadiumController::class)
+        ->prefix('/stadium')->name('stadium.')->group(function () {
+            Route::get('/list', 'list'); // Fetches the list of stadiums
+            Route::post('/store', 'store'); // Stores a new stadium
+            Route::post('/update/{id}', 'update'); // Updates an existing stadium by ID
+            Route::get('/show/{id}', 'show'); // Retrieves a specific stadium by ID
+            Route::delete('/destroy/{id}', 'destroy'); // Deletes a stadium by ID
+        });
+    // Registering the routes for the Pitch resource
+    Route::controller(PitchController::class)
+        ->prefix('/pitch')->name('pitch.')->group(function () {
+            Route::get('/list', 'list'); // Fetches the list of pitches
+            Route::post('/store', 'store'); // Stores a new pitch
+            Route::post('/update/{id}', 'update'); // Updates an existing pitch by ID
+            Route::get('/show/{id}', 'show'); // Retrieves a specific pitch by ID
+            Route::delete('/destroy/{id}', 'destroy'); // Deletes a pitch by ID
+        });
+});
+

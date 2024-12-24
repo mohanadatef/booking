@@ -2,7 +2,7 @@
 
 namespace Modules\Stadium\Service;
 
-use Modules\Stadium\Repositories\StadiumRepository;
+use Modules\Stadium\Repositories\BookingRepository;
 use Modules\Basic\Service\BasicService;
 
 /**
@@ -12,15 +12,15 @@ use Modules\Basic\Service\BasicService;
  */
 class StadiumService extends BasicService
 {
-    protected StadiumRepository $repo;
+    protected BookingRepository $repo;
 
     /**
      * StadiumService constructor.
      * Initializes the StadiumService with a StadiumRepository instance.
      *
-     * @param StadiumRepository $repository
+     * @param BookingRepository $repository
      */
-    public function __construct(StadiumRepository $repository)
+    public function __construct(BookingRepository $repository)
     {
         $this->repo = $repository;
     }

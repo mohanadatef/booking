@@ -2,8 +2,8 @@
 
 namespace Modules\Stadium\Models;
 
-use App\Models\Booking;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Booking\Models\Booking;
 
 /**
  * The Pitch class represents a pitch entity within the system.
